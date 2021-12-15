@@ -1,0 +1,38 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaUser
+metadata:
+  name: tls-external-user
+  labels:
+    strimzi.io/cluster: my-cluster
+spec:
+  authentication:
+    type: tls-external
+  authorization:
+    type: simple
+    acls:
+      # Example consumer Acls for topic my-topic using consumer group my-group
+      - resource:
+          type: topic
+          name: my-topic
+        operation: Read
+      - resource:
+          type: topic
+          name: my-topic
+        operation: Describe
+      - resource:
+          type: group
+          name: my-group
+        operation: Read
+      # Example Producer Acls for topic my-topic
+      - resource:
+          type: topic
+          name: my-topic
+        operation: Write
+      - resource:
+          type: topic
+          name: my-topic
+        operation: Create
+      - resource:
+          type: topic
+          name: my-topic
+        operation: Describe

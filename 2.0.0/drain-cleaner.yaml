@@ -1,0 +1,154 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: strimzi-drain-cleaner
+  labels:
+    app: strimzi-drain-cleaner
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: strimzi-drain-cleaner
+  labels:
+    app: strimzi-drain-cleaner
+  namespace: strimzi-drain-cleaner
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: strimzi-drain-cleaner
+  labels:
+    app: strimzi-drain-cleaner
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - get
+      - patch
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: strimzi-drain-cleaner
+  labels:
+    app: strimzi-drain-cleaner
+subjects:
+  - kind: ServiceAccount
+    name: strimzi-drain-cleaner
+    namespace: strimzi-drain-cleaner
+roleRef:
+  kind: ClusterRole
+  name: strimzi-drain-cleaner
+  apiGroup: rbac.authorization.k8s.io
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: strimzi-drain-cleaner
+  labels:
+    app: strimzi-drain-cleaner
+  annotations:
+    service.beta.openshift.io/serving-cert-secret-name: strimzi-drain-cleaner
+  namespace: strimzi-drain-cleaner
+spec:
+  ports:
+    - port: 80
+      name: http
+      protocol: TCP
+      targetPort: 8080
+    - port: 443
+      name: https
+      protocol: TCP
+      targetPort: 8443
+  selector:
+    app: strimzi-drain-cleaner
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: strimzi-drain-cleaner
+  labels:
+    app: strimzi-drain-cleaner
+  namespace: strimzi-drain-cleaner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: strimzi-drain-cleaner
+  template:
+    metadata:
+      labels:
+        app: strimzi-drain-cleaner
+    spec:
+      serviceAccountName: strimzi-drain-cleaner
+      containers:
+        - name: strimzi-drain-cleaner
+          image: quay.io/strimzi/drain-cleaner:0.2.0
+          ports:
+            - containerPort: 8080
+              name: http
+            - containerPort: 8443
+              name: https
+          command:
+            - "/application"
+            - "-Dquarkus.http.host=0.0.0.0"
+            - "--kafka"
+            - "--zookeeper"
+          volumeMounts:
+            - name: webhook-certificates
+              mountPath: "/etc/webhook-certificates"
+              readOnly: true
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 30
+      volumes:
+        - name: webhook-certificates
+          secret:
+            secretName: strimzi-drain-cleaner
+  strategy:
+    type: RollingUpdate
+---
+
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: strimzi-drain-cleaner
+  labels:
+    app: strimzi-drain-cleaner
+  annotations:
+    service.beta.openshift.io/inject-cabundle: "true"
+webhooks:
+  - name: strimzi-drain-cleaner.strimzi.io
+    rules:
+      - apiGroups:   [""]
+        apiVersions: ["v1"]
+        operations:  ["CREATE"]
+        resources:   ["pods/eviction"]
+        scope:       "Namespaced"
+    clientConfig:
+      service:
+        namespace: "strimzi-drain-cleaner"
+        name: "strimzi-drain-cleaner"
+        path: /drainer
+        port: 443
+      caBundle: Cg==
+    admissionReviewVersions: ["v1"]
+    sideEffects: None
+    failurePolicy: Ignore
+    timeoutSeconds: 5
