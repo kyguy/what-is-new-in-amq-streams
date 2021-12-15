@@ -111,6 +111,11 @@
 
 ### Deploy Kafka Connect with `maven` type artifact
 
+1. We will use the Kafka cluster deployed by the previous sections.
+   If you haven't deployed it yet, you can use the [`kafka.yaml`](./kafka.yaml) file from this repository:
+   ```
+   kubectl apply -f https://raw.githubusercontent.com/scholzj/what-is-new-in-amq-streams/main/2.0.0/kafka.yaml
+   ```
 2. Check the [`connect.yaml`](./connect.yaml) file with the Kafka Connect configuration.
    Notice the `camel-timer-connector` which uses the new `maven` artifact type and will download the connector directly from Maven repositories.
    ```yaml
@@ -406,19 +411,12 @@
 3. _(On your own)_ 
    Deploy a fresh Kafka cluster and check that for a new Kafka cluster, not network policies will be created
 
-### Cleanup
+## Cleanup
 
-4. Delete the Kafka cluster and the network policies after the demo:
-   ```
-   kubectl delete kafka my-cluster
-   kubectl delete networkpolicy my-cluster-network-policy-kafka
-   ```
-
-### Cleanup
-
-8. Once done you can delete all the Strimzi resources used during the demo:
+1. Once done you can delete all the resources used during the demo:
    ```
    kubectl delete $(kubectl get strimzi -o name)
+   kubectl delete -f https://raw.githubusercontent.com/scholzj/what-is-new-in-amq-streams/main/2.0.0/drain-cleaner.yaml
    ```
    And uninstall the operator.
    If you created the secret with the container registry credentials, don't forget to delete it as well.
