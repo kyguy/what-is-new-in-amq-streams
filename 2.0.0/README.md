@@ -393,11 +393,11 @@
    * If you use Operator Hub, you can set it in the `Subscription` resource:
      ```yaml
      spec:
-     # ...
-     config:
-       env:
-         - name: STRIMZI_NETWORK_POLICY_GENERATION
-         value: "false"
+       # ...
+       config:
+         env:
+           - name: STRIMZI_NETWORK_POLICY_GENERATION
+             value: "false"
      ```
 2. Use the existing Kafka cluster and check the effect of the disabled Network Policies
      * Edit one of the network policies and save the changes
