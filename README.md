@@ -8,7 +8,7 @@ The demos / labs for AMQ Streams 2.1.0 are in the [2.1.0 subdirectory](./2.1.0/)
 * Running on FIPS enabled OCP clusters
 * Control Plane Listener feature gate
 * Disabling bootstrap load balancers
-* ??? Intra-broker balancing ???
+* Intra-broker balancing
 * Bonus: Try the StrimziPodSets
 
 ## AMQ Streams 2.0.0

@@ -20,7 +20,7 @@
    kubectl apply -f https://raw.githubusercontent.com/scholzj/what-is-new-in-amq-streams/main/2.1.0/kafka.yaml
    ```
 
-3. You should see that the Strimzi Cluster Operator is crash-looping with an error similar to this:
+3. You should see that the AMQ Streams Cluster Operator is crash-looping with an error similar to this:
    ```
    Exception in thread "main" io.fabric8.kubernetes.client.KubernetesClientException: An error has occurred.
       at io.fabric8.kubernetes.client.KubernetesClientException.launderThrowable(KubernetesClientException.java:103)
@@ -220,12 +220,12 @@
     They should not exist anymore.
     Now check the StrimziPodSets instead with `kubectl get strimzipodsets` and you should see the pod sets being used for ZooKeeper nodes and Kafka brokers
 
-23. Try to delete the individual Kafka or ZooKeeper pods and check that they are recreated by the Strimzi operator.
+23. Try to delete the individual Kafka or ZooKeeper pods and check that they are recreated by the AMQ Streams operator.
     You can also try other things such as rolling-updates, scaling etc.
 
 ### Cleanup
 
-24. Once done you can delete all the Strimzi resources used during the demo:
+24. Once done you can delete all the AMQ Streams resources used during the demo:
     ```
     kubectl delete $(kubectl get strimzi -o name)
     ```
