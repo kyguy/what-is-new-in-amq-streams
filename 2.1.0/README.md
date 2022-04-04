@@ -21,7 +21,7 @@
    ```
 
 3. You should see that the AMQ Streams Cluster Operator is crash-looping with an error similar to this:
-   ```
+   ```log
    Exception in thread "main" io.fabric8.kubernetes.client.KubernetesClientException: An error has occurred.
       at io.fabric8.kubernetes.client.KubernetesClientException.launderThrowable(KubernetesClientException.java:103)
       at io.fabric8.kubernetes.client.KubernetesClientException.launderThrowable(KubernetesClientException.java:97)
@@ -83,7 +83,7 @@
    kubectl logs my-cluster-kafka-0 | grep acceptor
    ```
    You should see something like this:
-   ```
+   ```log
    2021-12-23 16:21:48,137 INFO [SocketServer listenerType=ZK_BROKER, nodeId=0] Created control-plane acceptor and processor for endpoint : ListenerName(CONTROLPLANE-9090) (kafka.network.SocketServer) [main]
    ...
    2021-12-23 16:21:49,288 INFO [SocketServer listenerType=ZK_BROKER, nodeId=0] Started control-plane acceptor and processor(s) for endpoint : ListenerName(CONTROLPLANE-9090) (kafka.network.SocketServer) [main]
@@ -122,7 +122,7 @@
 
 10. Check that the Control Plane Listener on port 9090 is not used in anymore:
     ```
-    kubectl logs my-cluster-kafka-0 | grep control-plane
+    kubectl logs my-cluster-kafka-0 | grep acceptor
     ```
     You can also check the configuration file of the Kafka broker:
     ```
@@ -142,8 +142,12 @@
           createBootstrapService: false
     ```
 
-12. Wait for the cluster to roll and check the services / load balancers.
-    You should see only the per-broker load balancers.
+12. Wait for the cluster to roll and check the services / load balancers:
+    ```
+    kubectl get service -o wide
+    ```
+    You should see only three `type: LoadBalance` services for the brokers.
+    You can also check the Kafka custom resource status to see that the bootstrap address now consists of the per-broker load balancers instead of using the bootstrap load balancer.
 
 13. _(Bonus) Change the `createBootstrapService` flag to `true` or remove it completely and the operator should create the load balancer._
 
