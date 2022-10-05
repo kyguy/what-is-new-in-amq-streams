@@ -37,7 +37,7 @@ spec:
       type: persistent-claim
       size: 100Gi
       deleteClaim: true
-  # In Strimzi 0.29.0, the Entity Operator is not supported in KRaft mode and has to be disabled
+  # In AMQ Streams 2.2.0, the Entity Operator is not supported in KRaft mode and has to be disabled
   # entityOperator:
   #   topicOperator: {}
   #   userOperator: {}
