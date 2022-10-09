@@ -169,7 +169,7 @@ _This is experimental mode which should be used only for development and testing
     ```
     kubectl apply -f https://raw.githubusercontent.com/scholzj/what-is-new-in-amq-streams/main/2.2.0/kraft.yaml
     ```
-    For a full list of features unsupported in the KRaft mode, visit the [docs](https://strimzi.io/docs/operators/0.29.0/full/configuring.html#ref-operator-use-kraft-feature-gate-str).
+    For a full list of features unsupported in the KRaft mode, visit the [docs](https://access.redhat.com/documentation/en-us/red_hat_amq_streams/2.2/html/configuring_amq_streams_on_openshift/assembly-operators-str#ref-operator-use-kraft-feature-gate-str).
 
 15. Wait for the deployment to complete and check that ZooKeeper is indeed missing.
     Test the cluster by sending and receiving some messages.
