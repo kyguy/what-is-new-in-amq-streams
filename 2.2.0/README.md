@@ -112,7 +112,7 @@ _This is the same demo as last time. But with a lot of fixes and improvements in
      ```
      Or use the `kubectl set env` command.
      ```
-     kubectl set env deployment/strimzi-cluster-operator STRIMZI_FEATURE_GATES=disabled
+     kubectl set env deployment/strimzi-cluster-operator STRIMZI_FEATURE_GATES=+UseStrimziPodSets
      ```
    * If you use Operator Hub, you can set it in the `Subscription` resource:
      ```yaml
