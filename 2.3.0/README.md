@@ -143,7 +143,7 @@
     ```
     You should see `Hello World` messages being received by the consumer
 
-12. Check the `KafkaUser` definition in the [`clients.yaml`](./clients.yaml) file and notice how the ACL rights are specified:
+12. Check the `KafkaUser` definition in the [`clients.yaml`](./clients.yaml) file or using `kubectl get ku client-example -o yaml` and notice how the ACL rights are specified:
     You can see that a single ACL rule now covers multiple ACL operations:
     ```yaml
      authorization:
@@ -194,7 +194,7 @@
     auto.create.topics.enable: "false"
     ```
 
-17. Watch the Kubernetes events with `kubectl get events -w`.
+17. Watch the Kubernetes events with `kubectl get events -w` or `kubectl get events -w | grep ConfigChangeRequiresRestart`.
 
 18. When the operator rolls the Kafka brokers, you should see the following events in your log:
     ```
@@ -230,7 +230,7 @@
 
 20. Watch all the pods of our Kafka cluster to roll as the changed security configuration is rolled out.
     Once the rolling update is finished, check the security context of the different pods.
-    You should see the following security context for all containers:
+    You should see a security context similar to this in all containers:
     ```yaml
      securityContext:
        allowPrivilegeEscalation: false
