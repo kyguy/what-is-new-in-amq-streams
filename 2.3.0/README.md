@@ -168,7 +168,7 @@
     kubectl get kafkarebalance -o wide -w
     ```
 
-14. Now create a rebalance resource.
+14. Now create a `KafkaRebalance` resource.
     You can use the [`rebalance.yaml`](./rebalance.yaml) file from this repository:
     ```
     kubectl apply -f https://raw.githubusercontent.com/scholzj/what-is-new-in-amq-streams/main/2.3.0/rebalance.yaml
@@ -176,7 +176,7 @@
     Notice the `strimzi.io/rebalance-auto-approval: true` annotation.
 
 15. Get back to the terminal where you are watching the rebalances.
-    You should see how the rebalance was automatically approved and and moved through the `ProposalReady` stage to `Rebalancing` and finally to `Ready` automatically:
+    You should see how the rebalance was automatically approved and moved through the `ProposalReady` stage to `Rebalancing` and finally to `Ready` automatically:
     ```
     NAME           CLUSTER      PENDINGPROPOSAL   PROPOSALREADY   REBALANCING   READY   NOTREADY
     my-rebalance   my-cluster
