@@ -150,12 +150,21 @@
       ```
 
 14. Watch the Kafka connect pods roll one by one.
-    The new pods will have stable names which will not change with every restart such as `my-connect-connect-0` or `my-connect-connect-1`.
+    The new pods will have stable names which will not change with every restart such as `my-connect-connect-0` or `my-connect-connect-1`:
+    ```
+    $ kubectl get pods
+    NAME                                          READY   STATUS      RESTARTS        AGE
+    ...
+    my-connect-connect-0                          1/1     Running     0               5m18s
+    my-connect-connect-1                          1/1     Running     0               4m17s
+    my-connect-connect-2                          1/1     Running     0               3m6s
+    ...
+    ```
     They will be also managed by a `StrimziPodSet` resource instead of Kubernetes Deployment:
     ```
     $ kubectl get strimzipodset my-connect-connect
     NAME                 PODS   READY PODS   CURRENT PODS   AGE
-    my-connect-connect   3      3            3              4m15s
+    my-connect-connect   3      3            3              5m54s
     ```
     You can check the logs from the Connect pods to see that the connectors still work.
 
