@@ -2,6 +2,12 @@
 
 This repository contains the demos/labs for the _What's new in AMQ Streams_ sessions.
 
+## AMQ Streams 2.4.0
+
+The demos/labs for AMQ Streams 2.4.0 are in the [2.4.0 subdirectory](./2.4.0/):
+* Stable Pod-identities in Kafka Connect
+* Connector auto-restarting
+
 ## AMQ Streams 2.3.0
 
 The demos/labs for AMQ Streams 2.3.0 are in the [2.3.0 subdirectory](./2.3.0/):
