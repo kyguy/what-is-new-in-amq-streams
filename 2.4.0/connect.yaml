@@ -20,7 +20,7 @@ spec:
   build:
     output:
       type: docker
-      image: ttl.sh/whats-new-in-amq-streams-2.4.0:24h
+      image: image-registry.openshift-image-registry.svc:5000/myproject/kafka-connect-build:latest
     plugins:
       - name: echo-sink-connector
         artifacts:
