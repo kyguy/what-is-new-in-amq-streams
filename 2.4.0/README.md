@@ -48,7 +48,7 @@
 
 7. Send five messages to the `my-topic` topic:
    ```
-   kubectl run kafka-producer -ti --image=quay.io/strimzi/kafka:0.33.0-kafka-3.3.2 --rm=true --restart=Never -- bin/kafka-console-producer.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --topic my-topic
+   kubectl run kafka-producer -ti --image=quay.io/strimzi/kafka:0.34.0-kafka-3.4.0 --rm=true --restart=Never -- bin/kafka-console-producer.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --topic my-topic
    If you don't see a command prompt, try pressing enter.
    >Hello World 1
    >Hello World 2
@@ -56,7 +56,12 @@
    >Hello World 4
    >Hello World 5
    ```
-   After the fifth message, you should see in the Connect log that the connector task fails:
+   After the fifth message, you should see in the Connect log that the connector task fails.
+   You can use the following command to watch the Connect logs:
+   ```
+   kubectl logs deployment/my-connect-connect -f
+   ```
+   And you should see there an error similar to the following:
    ```
    2023-01-22 23:02:52,246 WARN [echo-sink|task-0] Failing as requested after 5 records (cz.scholz.kafka.connect.echosink.EchoSinkTask) [task-thread-echo-sink-0]
    2023-01-22 23:02:52,246 ERROR [echo-sink|task-0] WorkerSinkTask{id=echo-sink-0} Task threw an uncaught and unrecoverable exception. Task is being killed and will not recover until manually restarted. Error: Intentional task failure after receiving 5 records. (org.apache.kafka.connect.runtime.WorkerSinkTask) [task-thread-echo-sink-0]
@@ -191,6 +196,10 @@ _On your own, on a FIPS enabled OpenShift cluster_
     You can confirm that the FIPS mode is enabled:
     ```
     cat /proc/sys/crypto/fips_enabled
+    ```
+    You can run the command from one of the Pods:
+    ```
+    kubectl exec -ti my-cluster-kafka-0 -- cat /proc/sys/crypto/fips_enabled
     ```
     If this file contains the value `1`, it means FIPS is enabled.
 
